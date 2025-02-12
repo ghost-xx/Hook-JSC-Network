@@ -1,4 +1,4 @@
-Android Cocos2d-JS SSL Mutual Certificate Bypass - For Educational Use Only 手游协议安全对抗交流群：4666099
+Android Cocos2d-JS SSL Mutual Certificate Bypass - For Educational Use Only       手游协议安全对抗交流群：4666099
 
 This project demonstrates how to bypass SSL mutual certificate validation in Android applications built with Cocos2d-JS. It is intended solely for educational and research purposes to analyze security mechanisms.
 
