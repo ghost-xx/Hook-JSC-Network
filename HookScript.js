@@ -97,4 +97,38 @@ function hook_jsc() {
 
 }
 
-setImmediate(hook_jsc);
+
+function load_so_and_hook() {
+	var dlopen = Module.findExportByName(null, "dlopen");
+	var android_dlopen_ext = Module.findExportByName(null, "android_dlopen_ext");
+	Interceptor.attach(dlopen, {
+		onEnter: function(args) {
+			var path_ptr = args[0];
+			var path = ptr(path_ptr).readCString();
+			console.log("[dlopen:]", path);
+			this.path = path;
+		},
+		onLeave: function(retval) {
+			if (this.path.indexOf(so_name) !== -1) { // 如果包含我想要的so文件
+				console.log("[dlopen:]", this.path);
+				hook_jsc();
+			}
+		}
+	});
+	Interceptor.attach(android_dlopen_ext, {
+		onEnter: function(args) {
+			var path_ptr = args[0];
+			var path = ptr(path_ptr).readCString();
+			this.path = path;
+		},
+		onLeave: function(retval) {
+			if (this.path.indexOf(so_name) !== -1) {
+				console.log("\nandroid_dlopen_ext加载：", this.path);
+				hook_jsc();
+			}
+		}
+	});
+}
+
+// 初始化加载so
+load_so_and_hook();
